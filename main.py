@@ -30,6 +30,10 @@ texts = [
 ]
 
 
+# auxiliary variable
+underscore = "-"*40
+
+
 # registered users
 users = {
         "bob": "123",
@@ -43,13 +47,13 @@ username = input("Enter username: ")
 password = input("Enter password: ")
 
 if username in users and users[username] == password:
-    print("-"*40)
+    print(underscore)
     print(f"Welcome to the app, {username}.")
     print(f"We have {len(texts)} texts to be analyzed.")
-    print("-"*40)
+    print(underscore)
 
 else:
-    print("-"*40)
+    print(underscore)
     print(f"username: {username}")
     print(f"password: {password}")
     print(f"unregistered user, terminating the program...")
@@ -61,7 +65,7 @@ text_number = input(f"Enter a number btw. 1 and {len(texts)} to select: ")
 
 if text_number.isdigit():
     text_number = int(text_number)
-    if text_number >= 1 and text_number <= len(texts):
+    if 1 <= text_number <= len(texts):
         print(f"Text number {text_number} was selected.")
     elif text_number < 1 or text_number > len(texts):
         print(f"The entered number {text_number} is outside the valid range.")
@@ -72,93 +76,53 @@ else:
     
 
 # text cleaning and word division
-index = text_number - 1
-words = texts[index].replace(",", "").replace(".", "").split() 
+texts_index = text_number - 1
+words = [w.strip(",.!?") for w in texts[texts_index].split()] 
 word_count = len(words)
-print("-"*40)
+print(underscore)
 print(f"There are {word_count} words in the selected text.")
 
 
-# titlecase words number
+# counter initialization
 titlecase_words = 0
-for word in words:
-    if word[0].isupper():
-        titlecase_words += 1
-print(f"There are {titlecase_words} titlecase words.")
-
-
-# uppercase words number
 uppercase_words = 0
-for word_u in words:
-    if word_u.isupper():
-        uppercase_words += 1
-print(f"There are {uppercase_words} uppercase words.")
-
-
-# lowercase words number
 lowercase_words = 0
-for word_l in words:
-    if word_l.islower():
-        lowercase_words += 1
-print(f"There are {lowercase_words} lowercase words.")
-
-
-# numeric strings number
 numeric_strings = 0
-for num_str in words:
-    if num_str.isdigit():
-        numeric_strings += 1
-print(f"There are {numeric_strings} numeric strings.")
-
-
-# sum of all the numbers
-sum = 0
-for number_str in words:
-    if number_str.isdigit():
-        number = int(number_str)
-        sum = sum + number
-print(f"The sum of all the numbers is {sum}.")
-
-
-# frequency of different word lengths in the text
+total = 0
 occurrences = {}
-for word_occ in words:
-    length_word = len(word_occ)
+
+# common for loop
+for word in words:
+    # number by letter type
+    if word.istitle():
+        titlecase_words += 1
+    elif word.isupper():
+        uppercase_words += 1
+    elif word.islower():
+        lowercase_words += 1
+
+    # numeric strings number and total of all the numbers
+    if word.isdigit():
+        numeric_strings += 1
+        total += int(word)
+
+    # frequency of different word lengths in the text
+    length_word = len(word)
     occurrences[length_word] = occurrences.get(length_word, 0) + 1
+
+# results list
+print(f"There are {titlecase_words} titlecase words.")
+print(f"There are {uppercase_words} uppercase words.")
+print(f"There are {lowercase_words} lowercase words.")
+print(f"There are {numeric_strings} numeric strings.")
+print(f"The sum of all the numbers is {total}.")
 
 
 # bar chart
-print("-"*40)
+print(underscore)
 print("LEN|OCCURRENCES                   |NR.")
-print("-"*40)
+print(underscore)
 
 for length, occurence in sorted(occurrences.items()):
-    print(f"{length:>3}|{"*" * occurence:<30}|{occurence:<3}")
+    print(f"{length:>3}|{'*' * occurence:<30}|{occurence:<3}")
     
-
-
-
-
-
-
-    
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
